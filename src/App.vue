@@ -1,8 +1,9 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <!--    <router-link to="/">Home</router-link> |-->
+    <!--    <router-link to="/about">About</router-link>-->
   </nav>
+  <!--路由匹配到的组件内容显示位置，相当于占位符-->
   <router-view />
 </template>
 
