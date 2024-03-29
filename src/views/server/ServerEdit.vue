@@ -200,6 +200,7 @@ export default {
   methods: {
     dialogClose() {
       this.$emit("update:visible", false); // 当对话框关闭，通过父组件更新为false
+      this.$parent.getData(); // 调用父组件方法，重新获取数据
     },
     submit() {
       this.$refs.formRef
@@ -211,7 +212,7 @@ export default {
               .then((res) => {
                 if (res.data.code == 200) {
                   this.$message.success("修改成功");
-                  // this.$parent.getData(); // 调用父组件方法，重新获取数据
+                  this.$parent.getData(); // 调用父组件方法，重新获取数据
                   this.dialogClose(); // 关闭窗口
                 } else {
                   this.$message.success(res.data.msg);

@@ -342,7 +342,7 @@
       />
 
       <!--操作拦-->
-      <el-table-column fixed="right" label="操作" width="150">
+      <el-table-column fixed="right" label="操作" width="200">
         <template #default="scope">
           <el-button
             type="primary"
@@ -355,6 +355,12 @@
             size="small"
             @click="handleDel(scope.$index, scope.row)"
             >删除</el-button
+          >
+          <el-button
+            type="warning"
+            size="small"
+            @click="handleSync(scope.$index, scope.row)"
+            >同步</el-button
           >
         </template>
       </el-table-column>
@@ -376,6 +382,35 @@
       />
     </div>
   </el-card>
+
+  <!--操作栏：点击同步选择凭据对话框-->
+  <el-dialog v-model="credentialVisible" width="20%" title="请选择SSH连接凭据">
+    <el-col :span="2">
+      <el-icon :size="23"><lock /></el-icon>
+    </el-col>
+    <el-col :span="22" :offset="1">
+      <el-select
+        class="m-2"
+        v-model="credentialId"
+        @click="getCredential"
+        placeholder="请选择"
+      >
+        <el-option
+          v-for="row in credential"
+          :key="row.id"
+          :label="`${row.name}-${row.username}`"
+          :value="row.id"
+        >
+        </el-option>
+      </el-select>
+    </el-col>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="credentialVisible = false">取消</el-button>
+        <el-button type="primary" @click="sync">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 
   <ServerEdit v-model:visible="editDialogVisible" :row="row"></ServerEdit>
   <ServerCreate v-model:visible="createDialogVisible"></ServerCreate>
@@ -428,6 +463,8 @@ export default {
         update_time: false,
         create_time: false,
         note: false,
+        credential: "",
+        credentialId: "",
       },
       columnVisible: false, // 展示与隐藏
       excelDialogVisible: false,
@@ -502,6 +539,43 @@ export default {
         });
       });
     },
+    // 选择凭据后确认按钮
+    sync() {
+      if (this.credentialId) {
+        this.$http
+          .get("/cmdb/host_collect/", {
+            params: {
+              hostname: this.currentRow.hostname,
+              credential_id: this.credentialId,
+            },
+          })
+          .then((res) => {
+            if (res.data.code == 200) {
+              this.$message.success("同步成功");
+              this.getData();
+              this.credentialVisible = false;
+            }
+          });
+      } else {
+        this.$message.warning("请选择凭据！");
+      }
+    },
+    handleSync(index, row) {
+      this.currentRow = row;
+      // 如果主机有凭据直接同步
+      if (row.credential) {
+        this.$http
+          .get("/cmdb/host_collect/", { params: { hostname: row.hostname } })
+          .then((res) => {
+            if (res.data.code == 200) {
+              this.$message.success("同步成功");
+              this.getData();
+            }
+          });
+      } else {
+        this.credentialVisible = true;
+      }
+    },
     onSearch() {
       this.getData();
     },
@@ -521,6 +595,11 @@ export default {
     getServerGroup() {
       this.$http.get("/cmdb/server_group/?page_size=50").then((res) => {
         this.serverGroup = res.data.data;
+      });
+    },
+    getCredential() {
+      this.$http.get("/config/credential/?page_size=50").then((res) => {
+        this.credential = res.data.data;
       });
     },
   },

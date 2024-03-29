@@ -5,12 +5,7 @@
     title="导入云主机"
     @close="dialogClose"
   >
-    <el-steps
-      :space="200"
-      :active="active"
-      align-center
-      style="margin-bottom: 10%"
-    >
+    <el-steps :active="active" align-center style="margin-bottom: 10%">
       <el-step title="公有云"></el-step>
       <el-step title="访问凭据"></el-step>
       <el-step title="导入确认"></el-step>
@@ -25,7 +20,7 @@
     >
       <!--第一步-->
       <div v-show="active == 1">
-        <el-form-item prop="cloud" label-width="180px">
+        <el-form-item prop="cloud" label-width="0px" style="margin-left: 30%">
           <el-radio-group v-model="form.cloud">
             <el-radio label="aliyun"
               ><img src="../../assets/img/aliyun.png"

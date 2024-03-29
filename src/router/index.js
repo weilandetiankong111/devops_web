@@ -55,7 +55,7 @@ const routes = [
       {
         path: "/config/credential",
         name: "凭据管理",
-        component: () => import("../views/C"),
+        component: () => import("../views/credential/Credential.vue"),
       },
     ],
   },
