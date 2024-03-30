@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router"; // 1.导入路由
-import Layout from "../views/Layout.vue";
-// import * as path from "path"; // 导入组件方式1：先导入，下面引用
+import Layout from "../views/Layout.vue"; // 导入组件方式1：先导入，下面引用
 
 // 2.定义路由对象
 const routes = [
   {
-    path: "/login/",
+    path: "/login",
     component: () => import("../views/Login"),
   },
   {
@@ -32,17 +31,45 @@ const routes = [
       {
         path: "/host/idc",
         name: "机房管理",
-        component: () => import("../views/idc/Idc.vue"),
+        component: () => import("../views/idc/Idc"),
       },
       {
         path: "/host/server_group",
         name: "主机分组",
-        component: () => import("../views/servergroup/ServerGroup.vue"),
+        component: () => import("../views/servergroup/ServerGroup"),
       },
       {
         path: "/host/server",
         name: "主机管理",
         component: () => import("../views/server/Server"),
+      },
+    ],
+  },
+  {
+    path: "/release",
+    name: "应用发布",
+    icon: "Platform",
+    component: Layout,
+    children: [
+      {
+        path: "/release/env",
+        name: "环境管理",
+        component: () => import("../views/env/Env"),
+      },
+      {
+        path: "/release/project",
+        name: "项目管理",
+        component: () => import("../views/env/Env"),
+      },
+      {
+        path: "/release/app",
+        name: "应用管理",
+        component: () => import("../views/env/Env"),
+      },
+      {
+        path: "/release/apply",
+        name: "发布申请",
+        component: () => import("../views/env/Env"),
       },
     ],
   },
@@ -55,7 +82,7 @@ const routes = [
       {
         path: "/config/credential",
         name: "凭据管理",
-        component: () => import("../views/credential/Credential.vue"),
+        component: () => import("../views/credential/Credential"),
       },
     ],
   },
@@ -70,14 +97,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   console.log(to.path, from.path, next);
   // 如果用户访问登录页，直接放行
-  if (to.path == "/login/") {
+  if (to.path == "/login") {
     return next();
   }
   const token = window.sessionStorage.getItem("token");
   if (token) {
     next(); // 正常跳转
   } else {
-    return next("/login/"); // 跳转转到登录页
+    return next("/login"); // 跳转转到登录页
   }
 });
 
