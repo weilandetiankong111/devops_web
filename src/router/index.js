@@ -59,17 +59,17 @@ const routes = [
       {
         path: "/release/project",
         name: "项目管理",
-        component: () => import("../views/env/Env"),
+        component: () => import("../views/project/Project"),
       },
       {
         path: "/release/app",
         name: "应用管理",
-        component: () => import("../views/env/Env"),
+        component: () => import("../views/app/App"),
       },
       {
         path: "/release/apply",
         name: "发布申请",
-        component: () => import("../views/env/Env"),
+        component: () => import("../views/apply/Apply"),
       },
     ],
   },
@@ -83,6 +83,11 @@ const routes = [
         path: "/config/credential",
         name: "凭据管理",
         component: () => import("../views/credential/Credential"),
+      },
+      {
+        path: "/config/notify",
+        name: "通知管理",
+        component: () => import("../views/notify/Notify"),
       },
     ],
   },
