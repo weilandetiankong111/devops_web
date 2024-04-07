@@ -163,6 +163,7 @@
 export default {
   props: {
     visible: Boolean,
+    // eslint-disable-next-line vue/require-prop-type-constructor
     rowId: "", // 应用ID
   },
   data() {
